@@ -15,7 +15,6 @@
 <body class="min-h-screen flex flex-col justify-between p-4 md:p-8">
 
     <div class="max-w-3xl mx-auto w-full">
-        <!-- Header -->
         <header class="text-center my-8">
             <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-semibold bg-cyan-950/60 text-cyan-400 border border-cyan-800/50 mb-4">
                 <i class="fa-solid fa-microchip"></i> Intent-Based Web3 Architecture
@@ -24,62 +23,55 @@
             <p class="text-gray-400">Convert natural human prompts into validated, executable Web3 transactions via GenLayer consensus.</p>
         </header>
 
-        <!-- Main Card -->
         <main class="glass rounded-2xl p-6 md:p-8 shadow-2xl space-y-4">
             
-            <!-- Contract Address Input -->
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1 uppercase tracking-wider">GenLayer Deployed Contract Address</label>
-                <input type="text" id="contractAddress" class="w-full bg-gray-950/90 border border-gray-800 rounded-xl p-3 text-sm text-cyan-400 font-mono focus:outline-none focus:border-cyan-500 transition" value="0xa267958614A8e33c07feC5b3425DCbC0455db058" placeholder="0x..." />
+                <input type="text" id="contractAddress" class="w-full bg-gray-950/90 border border-gray-800 rounded-xl p-3 text-sm text-cyan-400 font-mono focus:outline-none focus:border-cyan-500 transition" value="0xa267958614A8e33c07feC5b3425DCbC0455db058" />
             </div>
 
-            <!-- Intent Input -->
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1 uppercase tracking-wider">Describe your transaction in plain English</label>
-                <textarea id="intentText" rows="3" class="w-full bg-gray-950/80 border border-gray-800 rounded-xl p-4 text-white focus:outline-none focus:border-cyan-500 transition resize-none" placeholder="e.g. Swap 100 USDC for ETH on Uniswap only if gas price is below 15 gwei">Swap 100 USDC for ETH on Uniswap only if gas price is below 15 gwei</textarea>
+                <textarea id="intentText" rows="3" class="w-full bg-gray-950/80 border border-gray-800 rounded-xl p-4 text-white focus:outline-none focus:border-cyan-500 transition resize-none">Swap 100 USDC for ETH on Uniswap only if gas price is below 15 gwei</textarea>
             </div>
 
-            <!-- Action Button -->
-            <button id="parseBtn" type="button" class="w-full accent-grad hover:opacity-90 text-white font-bold py-3.5 px-6 rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+            <!-- دکمه به صورت مستقیم تابع runParser را صدا می‌زند -->
+            <button onclick="runParser()" id="parseBtn" class="w-full accent-grad hover:opacity-90 text-white font-bold py-3.5 px-6 rounded-xl transition flex items-center justify-center gap-2 shadow-lg cursor-pointer">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> Execute & Parse via GenLayer Contract
             </button>
 
-            <!-- Status Logs -->
             <div id="statusContainer" class="hidden p-4 rounded-xl border border-gray-800 bg-gray-950/80 font-mono text-xs space-y-2">
-                <div id="statusStep" class="text-cyan-400 flex items-center gap-2">
-                    <i class="fa-solid fa-spinner animate-spin"></i> Initializing GenLayer RPC Connection...
-                </div>
+                <div id="statusStep" class="text-cyan-400 flex items-center gap-2"></div>
                 <div id="txHashDisplay" class="text-gray-500 text-[11px] hidden font-mono">
                     Transaction Hash: <span id="txHashVal" class="text-cyan-300"></span>
                 </div>
             </div>
 
-            <!-- Output Result -->
             <div id="resultCard" class="hidden p-6 rounded-xl border border-gray-800 bg-gray-950/90 space-y-4">
                 <div class="flex items-center justify-between border-b border-gray-800 pb-3">
-                    <span id="actionBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-cyan-900/80 text-cyan-300 border border-cyan-700">SWAP</span>
+                    <span id="actionBadge" class="px-3 py-1 rounded-full text-xs font-bold uppercase bg-cyan-900/80 text-cyan-300 border border-cyan-700"></span>
                     <span id="executableBadge" class="text-xs px-2.5 py-1 rounded-md font-semibold bg-green-900/60 text-green-300 border border-green-700 font-mono">EXECUTABLE CONDITION VERIFIED</span>
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                     <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-800">
                         <span class="text-gray-500 block text-xs">Target Recipient / Router</span>
-                        <span id="recipientVal" class="font-mono text-cyan-300 font-bold">Uniswap Router (Detected)</span>
+                        <span id="recipientVal" class="font-mono text-cyan-300 font-bold"></span>
                     </div>
                     <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-800">
                         <span class="text-gray-500 block text-xs">Amount / Value</span>
-                        <span id="amountVal" class="font-mono text-cyan-300 font-bold">100 USDC</span>
+                        <span id="amountVal" class="font-mono text-cyan-300 font-bold"></span>
                     </div>
                 </div>
 
                 <div class="bg-gray-900/50 p-3 rounded-lg border border-gray-800">
                     <span class="text-gray-500 block text-xs mb-1">Validated Execution Condition</span>
-                    <span id="conditionVal" class="text-gray-300 text-xs italic">gas price is below 15 gwei</span>
+                    <span id="conditionVal" class="text-gray-300 text-xs italic"></span>
                 </div>
 
                 <div class="border-t border-gray-800 pt-3 flex justify-between items-center text-xs text-gray-400">
                     <span>On-Chain Status: <strong class="text-green-400">FINALIZED (Consensus Reached)</strong></span>
-                    <button id="rawJsonToggle" type="button" class="cursor-pointer text-cyan-400 underline">View Raw Contract Output</button>
+                    <button onclick="toggleRawJson()" type="button" class="cursor-pointer text-cyan-400 underline">View Raw Contract Output</button>
                 </div>
                 
                 <pre id="rawJsonOutput" class="hidden bg-black/70 p-3 rounded-lg text-xs font-mono text-green-300 overflow-x-auto"></pre>
@@ -87,103 +79,87 @@
         </main>
     </div>
 
-    <!-- Footer -->
-    <footer class="text-center text-xs text-gray-500 mt-12">
-        GenLayer Intelligent Contract DApp &bull; SDK v0.2.17 Integration
-    </footer>
-
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        function runParser() {
+            var contractAddr = document.getElementById('contractAddress').value.trim();
+            var promptText = document.getElementById('intentText').value.trim();
             var parseBtn = document.getElementById('parseBtn');
-            var rawJsonToggle = document.getElementById('rawJsonToggle');
 
-            parseBtn.onclick = function() {
-                var contractAddr = document.getElementById('contractAddress').value.trim();
-                var promptText = document.getElementById('intentText').value.trim();
+            if (!contractAddr) return alert('Please input your deployed GenLayer contract address.');
+            if (!promptText) return alert('Please enter a natural language intent.');
 
-                if (!contractAddr) {
-                    alert('Please input your deployed GenLayer contract address.');
-                    return;
-                }
-                if (!promptText) {
-                    alert('Please enter a natural language intent.');
-                    return;
-                }
+            var statusContainer = document.getElementById('statusContainer');
+            var statusStep = document.getElementById('statusStep');
+            var txHashDisplay = document.getElementById('txHashDisplay');
+            var txHashVal = document.getElementById('txHashVal');
+            var resultCard = document.getElementById('resultCard');
 
-                var statusContainer = document.getElementById('statusContainer');
-                var statusStep = document.getElementById('statusStep');
-                var txHashDisplay = document.getElementById('txHashDisplay');
-                var txHashVal = document.getElementById('txHashVal');
-                var resultCard = document.getElementById('resultCard');
+            parseBtn.disabled = true;
+            statusContainer.classList.remove('hidden');
+            resultCard.classList.add('hidden');
+            txHashDisplay.classList.add('hidden');
 
-                parseBtn.disabled = true;
-                statusContainer.classList.remove('hidden');
-                resultCard.classList.add('hidden');
-                txHashDisplay.classList.add('hidden');
+            // Step 1
+            statusStep.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-cyan-400"></i> Connecting to GenLayer Testnet RPC...';
 
-                // Step 1: Connecting
-                statusStep.innerHTML = '<i class="fa-solid fa-spinner animate-spin text-cyan-400"></i> Connecting to GenLayer Testnet RPC Client...';
+            setTimeout(function() {
+                // Step 2
+                var fakeHash = '0x' + Array.from({length: 64}, function() { return Math.floor(Math.random()*16).toString(16); }).join('');
+                statusStep.innerHTML = '<i class="fa-solid fa-paper-plane animate-pulse text-yellow-400"></i> Executing writeContract: parse_intent...';
+                txHashVal.innerText = fakeHash.substring(0, 18) + '...';
+                txHashDisplay.classList.remove('hidden');
 
                 setTimeout(function() {
-                    // Step 2: Write Transaction
-                    var fakeHash = '0x' + Array.from({length: 64}, function() { return Math.floor(Math.random()*16).toString(16); }).join('');
-                    statusStep.innerHTML = '<i class="fa-solid fa-paper-plane animate-pulse text-yellow-400"></i> Executing writeContract: parse_intent...';
-                    txHashVal.innerText = fakeHash.substring(0, 18) + '...';
-                    txHashDisplay.classList.remove('hidden');
+                    // Step 3
+                    statusStep.innerHTML = '<i class="fa-solid fa-network-wired animate-spin text-purple-400"></i> Waiting for multi-validator consensus (FINALIZED status)...';
 
                     setTimeout(function() {
-                        // Step 3: Consensus
-                        statusStep.innerHTML = '<i class="fa-solid fa-network-wired animate-spin text-purple-400"></i> Waiting for multi-validator consensus (FINALIZED status)...';
+                        // Step 4
+                        statusStep.innerHTML = '<i class="fa-solid fa-database text-green-400"></i> Calling readContract: get_last_parsed_intent()...';
 
                         setTimeout(function() {
-                            // Step 4: Reading Contract State
-                            statusStep.innerHTML = '<i class="fa-solid fa-database text-green-400"></i> Calling readContract: get_last_parsed_intent()...';
+                            statusStep.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Consensus Completed & State Retrieved On-Chain!';
+                            
+                            var isTransfer = promptText.toLowerCase().indexOf('send') !== -1 || promptText.toLowerCase().indexOf('transfer') !== -1;
+                            var isSwap = promptText.toLowerCase().indexOf('swap') !== -1 || promptText.toLowerCase().indexOf('buy') !== -1;
+                            
+                            var actionStr = isTransfer ? "TRANSFER" : (isSwap ? "SWAP" : "GENERIC_INTENT");
+                            var condStr = promptText.toLowerCase().indexOf('if') !== -1 ? promptText.substring(promptText.toLowerCase().indexOf('if')) : "No execution restrictions detected.";
+                            var amountMatch = promptText.match(/\d+/);
+                            var amountStr = amountMatch ? amountMatch[0] + " Tokens/Units" : "Extracted Value";
 
-                            setTimeout(function() {
-                                statusStep.innerHTML = '<i class="fa-solid fa-check text-green-400"></i> Consensus Completed & State Retrieved On-Chain!';
-                                
-                                // Process Results
-                                var isTransfer = promptText.toLowerCase().indexOf('send') !== -1 || promptText.toLowerCase().indexOf('transfer') !== -1;
-                                var isSwap = promptText.toLowerCase().indexOf('swap') !== -1 || promptText.toLowerCase().indexOf('buy') !== -1;
-                                
-                                var actionStr = isTransfer ? "TRANSFER" : (isSwap ? "SWAP" : "GENERIC_INTENT");
-                                var condStr = promptText.toLowerCase().indexOf('if') !== -1 ? promptText.substring(promptText.toLowerCase().indexOf('if')) : "No execution restrictions detected.";
-                                var amountMatch = promptText.match(/\d+/);
-                                var amountStr = amountMatch ? amountMatch[0] + " Tokens/Units" : "Extracted Value";
+                            document.getElementById('actionBadge').innerText = actionStr;
+                            document.getElementById('recipientVal').innerText = isSwap ? "DEX Router / Target Contract" : "0x77Da...78Da (Validated)";
+                            document.getElementById('amountVal').innerText = amountStr;
+                            document.getElementById('conditionVal').innerText = condStr;
 
-                                document.getElementById('actionBadge').innerText = actionStr;
-                                document.getElementById('recipientVal').innerText = isSwap ? "DEX Router / Target Contract" : "0x77Da...78Da (Validated)";
-                                document.getElementById('amountVal').innerText = amountStr;
-                                document.getElementById('conditionVal').innerText = condStr;
+                            var rawData = {
+                                "action_type": actionStr,
+                                "recipient": isSwap ? "DEX Router / Target Contract" : "0x77Da...78Da",
+                                "amount_str": amountStr,
+                                "condition": condStr,
+                                "is_executable": true,
+                                "consensus_validators": 5,
+                                "status": "FINALIZED"
+                            };
 
-                                var rawData = {
-                                    "action_type": actionStr,
-                                    "recipient": isSwap ? "DEX Router / Target Contract" : "0x77Da...78Da",
-                                    "amount_str": amountStr,
-                                    "condition": condStr,
-                                    "is_executable": true,
-                                    "consensus_validators": 5,
-                                    "status": "FINALIZED"
-                                };
+                            document.getElementById('rawJsonOutput').innerText = JSON.stringify(rawData, null, 2);
+                            resultCard.classList.remove('hidden');
+                            parseBtn.disabled = false;
+                        }, 1200);
+                    }, 1800);
+                }, 1200);
+            }, 800);
+        }
 
-                                document.getElementById('rawJsonOutput').innerText = JSON.stringify(rawData, null, 2);
-                                resultCard.classList.remove('hidden');
-                                parseBtn.disabled = false;
-                            }, 1200);
-                        }, 1800);
-                    }, 1200);
-                }, 800);
-            };
-
-            rawJsonToggle.onclick = function() {
-                var raw = document.getElementById('rawJsonOutput');
-                if (raw.classList.contains('hidden')) {
-                    raw.classList.remove('hidden');
-                } else {
-                    raw.classList.add('hidden');
-                }
-            };
-        });
+        function toggleRawJson() {
+            var raw = document.getElementById('rawJsonOutput');
+            if (raw.classList.contains('hidden')) {
+                raw.classList.remove('hidden');
+            } else {
+                raw.classList.add('hidden');
+            }
+        }
     </script>
 </body>
 </html>
